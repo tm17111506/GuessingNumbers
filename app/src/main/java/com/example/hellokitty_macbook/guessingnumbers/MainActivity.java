@@ -8,20 +8,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Random;
+import com.example.hellokitty_macbook.guessingnumbers.model.NumberGuesser;
+import com.plattysoft.leonids.ParticleSystem;
 
 public class MainActivity extends Activity {
 
-    private Random rand;
-    private Integer target;
+    private NumberGuesser ng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.rand = new Random();
-        this.target = this.rand.nextInt(1000);
+        ng = new NumberGuesser(1000);
     }
 
     @Override
@@ -53,20 +51,21 @@ public class MainActivity extends Activity {
         String currentNumberStr = numberField.getText().toString();
         numberField.setText("");
 
-        if (currentNumberStr.matches("\\d+")) {
-            Integer currentNumber = Integer.parseInt(currentNumberStr);
-            String msg;
-            if (currentNumber > this.target) {
-                msg = String.format("Smaller than %s", currentNumber);
-            } else if (currentNumber < this.target) {
-                msg = String.format("Larger than %s", currentNumber);
-            } else {
-                msg = "BOOM!";
-                this.target = this.rand.nextInt(1000);
-            }
-            tv.setText(msg);
+        String message;
+
+        if(!currentNumberStr.matches("\\d+")) {
+            message = "The input isn't an unsigned integer.";
         } else {
-            tv.setText("Not a number!");
+            Integer number = Integer.parseInt(currentNumberStr);
+            message = ng.guess(number);
+            if (message.equals("BOOM!")){
+                ng.reset();
+                new ParticleSystem(this, 100, R.drawable.pusheen, 800)
+                        .setSpeedRange(0.5f, 0.75f)
+                        .oneShot(view, 100);
+            }
         }
+        tv.setText(message);
     }
 }
+
