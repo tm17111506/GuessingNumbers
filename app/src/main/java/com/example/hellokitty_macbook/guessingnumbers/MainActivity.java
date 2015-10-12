@@ -1,18 +1,20 @@
 package com.example.hellokitty_macbook.guessingnumbers;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hellokitty_macbook.guessingnumbers.model.NumberGuesser;
 import com.plattysoft.leonids.ParticleSystem;
 
 public class MainActivity extends Activity {
-
+    
     private NumberGuesser ng;
 
     @Override
@@ -42,6 +44,15 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onSecondPageButtonClicked (View view) {
+        Intent secondPageIntent = new Intent(this, NewPage.class);
+        Bundle secondPageBundle = new Bundle();
+        secondPageBundle.putString("message","CAT");
+
+        secondPageIntent.putExtras(secondPageBundle);
+        startActivity(secondPageIntent);
     }
 
     public void onGoButtonClicked(View view) {
